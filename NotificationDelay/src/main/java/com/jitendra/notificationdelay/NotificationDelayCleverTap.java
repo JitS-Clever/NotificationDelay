@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.clevertap.android.sdk.CleverTapAPI;
+
 import java.text.ParseException;
 import java.util.Date;
 
@@ -16,29 +18,38 @@ public class NotificationDelayCleverTap {
 
     public void NotifTime(Context context, Bundle Extras) {
 
-        String notifTime = Extras.getString("Notif");
-        Long currentTime = System.currentTimeMillis();
-        Date epoch = null;
-        Long time;
-        try {
-            epoch = new java.text.SimpleDateFormat("dd MM yyyy HH:mm:ss.SSS").parse(notifTime);
+        if(Extras.containsKey("NotifyAt")){
+
+            String notifTime = Extras.getString("NotifyAt");
+            long currentTime = System.currentTimeMillis();
+            Date epoch = null;
+            long time;
+            try {
+                epoch = new java.text.SimpleDateFormat("dd MM yyyy HH:mm:ss.SSS").parse(notifTime);
+            }
+            catch (ParseException e){
+                e.printStackTrace();
+            }
+
+            assert epoch != null;
+            time = (Long) epoch.getTime();
+            Log.d("Epoch", Long.toString(time));
+            Log.d("Current Time", Long.toString(currentTime));
+
+            Intent intent = new Intent(context, NotificationBroadcast.class);
+            intent.putExtra("Extra",Extras);
+
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                    context, 123, intent, 0);
+
+            AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, time, pendingIntent);
+
         }
-        catch (ParseException e){
-            e.printStackTrace();
+        else{
+            CleverTapAPI.createNotification(context,Extras);
         }
 
-        time = (Long) epoch.getTime();
-        Log.d("Epoch", time.toString());
-        Log.d("Current Time", currentTime.toString());
-
-        Intent intent = new Intent(context, NotificationBroadcast.class);
-        intent.putExtra("Extra",Extras);
-        Log.d("123", "1");
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(
-                context, 123, intent, 0);
-        Log.d("123", "2");
-        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, time, pendingIntent);
-        Log.d("123", "3");
     }
+
 }
