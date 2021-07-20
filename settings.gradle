@@ -1,0 +1,3 @@
+rootProject.name = "NotificationDelayCleverTap"
+include ':app'
+include ':NotificationDelay'
