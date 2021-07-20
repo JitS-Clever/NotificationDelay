@@ -33,11 +33,12 @@ public class NotificationDelayCleverTap {
 
         Intent intent = new Intent(context, NotificationBroadcast.class);
         intent.putExtra("Extra",Extras);
-
+        Log.d("123", "1");
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
                 context, 123, intent, 0);
-
+        Log.d("123", "2");
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, time, pendingIntent);
+        Log.d("123", "3");
     }
 }
