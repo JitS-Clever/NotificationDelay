@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.clevertap.android.sdk.CleverTapAPI;
 
-public class NotificationBroadcast {
+public class NotificationBroadcast implements NotificationBroadcast1 {
 
 @Override
     public void onReceive(Context context, Intent intent) {
