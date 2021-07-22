@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.clevertap.android.sdk.CleverTapAPI;
+import com.clevertap.pushtemplates.TemplateRenderer;
+import com.clevertap.pushtemplates.Utils;
 
 public class NotificationBroadcast extends BroadcastReceiver {
 
@@ -15,6 +17,12 @@ public class NotificationBroadcast extends BroadcastReceiver {
 
         Bundle extras = intent.getBundleExtra("Extra");
         Log.d("123", "4");
-        CleverTapAPI.createNotification(context, extras);
+        if (Utils.isForPushTemplates(extras)) {
+            TemplateRenderer.createNotification(context, extras);
+            //TemplateRenderer.createNotification(context, extras, config);
+        } else {
+            CleverTapAPI.createNotification(context, extras);
+        }
+
     }
 }
